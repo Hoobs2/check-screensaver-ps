@@ -32,14 +32,23 @@ function Test-RegistryValue {
         [string]$regPath
     )
 
+    $counter = 0
+
     try {
         foreach ($userSID in $userSIDsTable.Keys) {
             $currentRegPath = "$regPathHive$userSID$regPath"
                         
 
             if ( (-not (Test-Path Registry::$currentRegPath)) -or (-not ((Get-Item Registry::$currentRegPath).Property -contains $valuename))) {
-                
-                continue
+                $counter++
+                if ($counter -eq $userSIDsTable.Count) {
+                    $logMessage = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') - No Issue!"
+                    Add-content -Path $logFilePath -Value $logMessage
+                    return 0
+                }
+                else {
+                    continue
+                }
             }
             else {
                 $registryValue = Get-ItemPropertyValue -Path Registry::$currentRegPath -Name $valueName -ErrorAction SilentlyContinue

@@ -56,27 +56,27 @@ function Set-RegistryKeyValue {
                 switch ($registryValue) {
                     #If ScreenSaveTimeOut is equal to 600, continue to next loop iteration.
                     {$_ -eq $newValue} {
-                        $logMessage = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') - Registry key '$valueName' under '$currentRegPath' was equal to 600."
+                        $logMessage = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') - Registry key '$valueName' under '$currentRegPath' is equal to 600."
                         Add-content -Path $logFilePath -Value $logMessage
                         continue
                     }
                     #If ScreenSaveTimeOut is greater than 600, continue to next loop iteration.
                     {$_ -gt $newValue} {
-                        $logMessage = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') - Registry key '$valueName' under '$currentRegPath' was greater than 600."
+                        $logMessage = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') - Registry key '$valueName' under '$currentRegPath' is greater than 600."
                         Add-content -Path $logFilePath -Value $logMessage
                         continue
                     }
                     #If ScreenSaveTimeOut is set to less then 600, set value to 600.
                     {$_ -lt $newValue} {
                         Set-ItemProperty -Path Registry::$currentRegPath -Name $valueName -Value $newValue -ErrorAction SilentlyContinue
-                        $logMessage = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') - Registry key '$valueName' under '$currentRegPath' was less than 600."
+                        $logMessage = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') - Registry key '$valueName' under '$currentRegPath' was less than 600. Changed to 600."
                         Add-content -Path $logFilePath -Value $logMessage
                         continue
                     }
                     #If ScreenSaveTimeOut exists but does not have a value, set value to 600
                     {$_ -eq $null} {
                         Set-ItemProperty -Path Registry::$currentRegPath -Name $valueName -Value $newValue -ErrorAction SilentlyContinue
-                        $logMessage = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') - Registry value '$valueName' under '$currentRegPath' did not have a value."
+                        $logMessage = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') - Registry value '$valueName' under '$currentRegPath' did not have a value set."
                         Add-content -Path $logFilePath -Value $logMessage
                         continue
                     }
